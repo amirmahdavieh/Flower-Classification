@@ -7,15 +7,15 @@ public class Program
 {
     public static void Main()
     {
-        String[,] inputArray = new string[150, 5];          // datalari dosyadan yerlestirmek icin array
-        int rowCounter = 0;                                 // satirlari sayan
+        String[,] inputArray = new string[150, 5];          // load data from a file into an array.
+        int rowCounter = 0;                                 // count rows
         double accuracy;
         double[] lambdas = { 0.005, 0.01, 0.025 };
         double[] epochs = { 20, 50, 100 };
-        double[,] table = new double[3, 3];                 // testte sonuclari yazdirmak icin kullandigimiz array
+        double[,] table = new double[3, 3];                 // array to print the results in testing
 
 
-        // dosyadan okumak
+        // read from the file
         foreach (string line in System.IO.File.ReadLines(@"C:\\Users\\Amir\\Desktop\\05200000863_AmirHosseinMahdavieh_05200000121_CerenAlyagiz\\05200000863_05200000121Project1_2nd\\iris.data"))
         {
 
@@ -29,17 +29,17 @@ public class Program
         }
 
         int row = 0;
-        foreach (double lambda in lambdas)          // lambdalari tane tane deniyoruz
+        foreach (double lambda in lambdas)          // test the labels one by one
         {
             int column = 0;
-            foreach (int epoch in epochs)           // epochlari tane tane deniyoruz
+            foreach (int epoch in epochs)           // trying epochs one by one
             {
-                NeuralNetwork neuralNetwork = new NeuralNetwork();          // neural network olusturuldu
+                NeuralNetwork neuralNetwork = new NeuralNetwork();          // neural network created
                 neuralNetwork.learn(inputArray, lambda, epoch);             // train 
                 accuracy = neuralNetwork.test(inputArray);                  // test
                 Console.WriteLine("The accuracy of " + epoch + " epoch and " + lambda + " lambda: " + "%" + String.Format("{0:0.00}", accuracy));
                 Console.WriteLine("----------------------------------------------");
-                table[row, column] = accuracy;          // sonuclari table'a atiyoruz
+                table[row, column] = accuracy;          // add the results to the table
                 column++;
             }
             row++;
@@ -49,7 +49,7 @@ public class Program
         Console.WriteLine("\t" + "0.005" + "\t" + "0.01" + "\t" + "0.025");
         Console.WriteLine("");
 
-        for (int v = 0; v < table.GetLength(0); v++)                // sonuclari ekrana tablo seklinde yazdirmak
+        for (int v = 0; v < table.GetLength(0); v++)                // print the results on the screen in a tabular format
         {
             Console.Write(epochs[v]);
             for (int i = 0; i < table.GetLength(1); i++)
@@ -69,7 +69,7 @@ public class Neuron
     {
         weights = new double[4];
         Random rnd = new Random();
-        for (int i = 0; i < weights.Length; i++)        // 4 tane weight olusturuldu (0 ve 1 arasi)
+        for (int i = 0; i < weights.Length; i++)        // Four weights were generated (between 0 and 1)
         {
             weights[i] = rnd.NextDouble();
         }
@@ -94,18 +94,18 @@ public class NeuralNetwork
     public Neuron n2;
     public Neuron n3;
 
-    public double resultN1;         // hesaplamalarin sonucu
+    public double resultN1;         // the result of the calculation
     public double resultN2;
     public double resultN3;
 
     public int maxCode;
     public NeuralNetwork()
     {
-        n1 = new Neuron();      // 3 tane Neuron nesne olusturuldu
+        n1 = new Neuron();      // Three Neuron objects were created
         n2 = new Neuron();
         n3 = new Neuron();
     }
-    public void learn(String[,] inputArray, double lambda, int epoch)       // egitme
+    public void learn(String[,] inputArray, double lambda, int epoch)       // learning
     {
         Neuron[] neurons = { n1, n2, n3 };
 
@@ -113,18 +113,18 @@ public class NeuralNetwork
         double input2;
         double input3;
         double input4;
-        String label;           // supervised learning icin label
+        String label;           // label for supervised learning
 
-        for (int e = 0; e < epoch; e++)         // epoch sayisina kadar egitiyor
+        for (int e = 0; e < epoch; e++)         // Training up to the number of epochs
         {
             double maxResult = 0;
-            double[] inputs = new double[4];            // datalari label haric arraya yerlestirmek icin
+            double[] inputs = new double[4];            //  place the data into an array excluding the labels
             int labelCode;
 
-            for (int row = 0; row < inputArray.GetLength(0); row++)             // 150 kere donuyor (datalari islemek icin)
+            for (int row = 0; row < inputArray.GetLength(0); row++)             // It iterates 150 times (for processing the data)
             {
 
-                input1 = Convert.ToDouble(String.Format("{0:0.00}", Convert.ToDouble(inputArray[row, 0]) / 10));        // her inputu 10'a boluyor
+                input1 = Convert.ToDouble(String.Format("{0:0.00}", Convert.ToDouble(inputArray[row, 0]) / 10));        // It divides each input by 10
                 input2 = Convert.ToDouble(String.Format("{0:0.00}", Convert.ToDouble(inputArray[row, 1]) / 10));
                 input3 = Convert.ToDouble(String.Format("{0:0.00}", Convert.ToDouble(inputArray[row, 2]) / 10));
                 input4 = Convert.ToDouble(String.Format("{0:0.00}", Convert.ToDouble(inputArray[row, 3]) / 10));
@@ -136,7 +136,7 @@ public class NeuralNetwork
 
                 label = inputArray[row, 4];
 
-                if (label == "Iris-setosa")                 // ciceklerin adlarini kodluyoruz
+                if (label == "Iris-setosa")                 // We are coding the names of the flowers
                 {
                     labelCode = 0;
                 }
@@ -154,16 +154,16 @@ public class NeuralNetwork
                 resultN3 = n3.calculate(inputs);
                 double[] results = { resultN1, resultN2, resultN3 };
 
-                for (int i = 0; i < results.Length; i++)            // n1, n2, n3 sonucundan en buyuk degeri bulmak
+                for (int i = 0; i < results.Length; i++)            // Finding the maximum value among the results of n1, n2, and n3
                 {
                     if (maxResult < results[i])
                     {
                         maxResult = results[i];
-                        maxCode = i;                                // max degeri kodlamak
+                        maxCode = i;                                // Coding the maximum value
                     }
                 }
 
-                if (maxCode != labelCode)                           // eger maxCode ve labelCode esit degilse, weightleri degistirmek lazim
+                if (maxCode != labelCode)                           // If maxCode and labelCode are not equal, change the weights
                 {
                     for (int i = 0; i < neurons[maxCode].weights.Length; i++)
                     {
@@ -180,7 +180,7 @@ public class NeuralNetwork
         }
     }
 
-    public double test(String[,] inputArray)                // test metodu
+    public double test(String[,] inputArray)                // test
     {
         Neuron[] neurons = { n1, n2, n3 };
 
@@ -238,7 +238,7 @@ public class NeuralNetwork
                 }
             }
 
-            if (maxCode == labelCode)           // eger maxCode ve labelCode esitse dogru degerlendirme anlamina geliyor -> correctAnswers'e bir eklememiz lazim
+            if (maxCode == labelCode)           // If maxCode and labelCode are equal, it indicates a correct evaluation -> we need to add it to correctAnswers
             {
                 correctAnswers += 1;
 
@@ -246,7 +246,7 @@ public class NeuralNetwork
 
         }
 
-        return (correctAnswers / 150) * 100;            // yuzde kac dogru oldugunu return ediyor
+        return (correctAnswers / 150) * 100;            // returns the percentage of correctness
     }
 
 }
