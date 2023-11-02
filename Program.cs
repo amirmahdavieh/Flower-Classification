@@ -16,7 +16,7 @@ public class Program
 
 
         // read from the file
-        foreach (string line in System.IO.File.ReadLines(@"C:\\Users\\Amir\\Desktop\\05200000863_AmirHosseinMahdavieh_05200000121_CerenAlyagiz\\05200000863_05200000121Project1_2nd\\iris.data"))
+        foreach (string line in System.IO.File.ReadLines(@"iris.data"))
         {
 
             inputArray[rowCounter, 0] = line.Split(',')[0];
