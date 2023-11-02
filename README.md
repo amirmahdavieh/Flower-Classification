@@ -1,1 +1,5 @@
 # Flower-Classification
+An algorithm is requested to determine which of the three types of flowers, Lily or Iris, a flower observed in nature belongs to. Data has been obtained by measuring 150 samples for each type of flower. For each sample, 4 features are available (sepal length, sepal width, petal length, petal width), and the information about which class (type) it belongs to is provided. Table 3 includes six of them. The dataset is available at https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data and will be used in the project.
+
+Using the C# programming language, I created an Artificial Neural Network (ANN), a machine learning method that forms the foundation of deep learning. The basic structures in this field are Artificial Neurons. Artificial Neural Networks (ANNs) are employed in solving various problems such as classification, clustering, and prediction.
+I utilized C# to generate an artificial neural network to address a given flower classification problem.
